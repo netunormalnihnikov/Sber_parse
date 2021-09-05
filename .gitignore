@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-test/
+test_sber/
 src/
 scripts/
 sber_market.rar
@@ -145,7 +145,7 @@ cython_debug/
 !/sber_market.rar
 !/pyvenv.cfg
 !/chromedriver.exe
-!/test/
+!/test_sber/
 !/src1/
 !/Lib/
 

@@ -8,6 +8,39 @@ import os.path
 from selenium_sber import SberSelenium
 from pathlib import Path
 
+valid_categories = {
+    'Автотовары',
+    'Бакалея',
+    'Бытовая химия, уборка',
+    'Вода, соки, напитки',
+    'Всё для ремонта',
+    'Готовые блюда и полуфабрикаты',
+    'Готовые блюда, полуфабрикаты',
+    'Дача, сад',
+    'Детские товары',
+    'Замороженные продукты',
+    'Зоотовары',
+    'Канцелярия',
+    'Колбасы, сосиски, деликатесы',
+    'Консервы, соленья',
+    'Косметика, гигиена',
+    'Молочные продукты, яйца',
+    'Мясо, птица',
+    'Овощи, фрукты, орехи',
+    'Одежда, обувь, аксессуары',
+    'Рыба, морепродукты',
+    'Сладости',
+    'Соусы, специи, масло',
+    'Спортивные товары',
+    'Сыры',
+    'Товары для дома',
+    'Хлеб, выпечка',
+    'Чай и кофе',
+    'Чай, кофе',
+    'Чипсы, снеки',
+    'Электроника, бытовая техника'
+}
+
 
 def get_img_lst():
     path_dir_script = Path(__file__).parent.joinpath("src/")
@@ -60,20 +93,21 @@ def save_file(result):
 
 def recursive(categories, store, category_names=None):
     for category in categories:
-        category_list = [category['name']]
-        if category_names:
-            category_list.extend(category_names)
-        if category["children"]:
-            recursive(category["children"], store, category_list)
-        else:
-            recurs_products = get_products(
-                category["icon"]["normal_url"],
-                category_list,
-                category["permalink"],
-                store
-            )
-            if recurs_products:
-                result.extend(recurs_products)
+        if category['name'] in valid_categories:
+            category_list = [category['name']]
+            if category_names:
+                category_list.extend(category_names)
+            if category["children"]:
+                recursive(category["children"], store, category_list)
+            else:
+                recurs_products = get_products(
+                    category["icon"]["normal_url"],
+                    category_list,
+                    category["permalink"],
+                    store
+                )
+                if recurs_products:
+                    result.extend(recurs_products)
     return
 
 
@@ -289,7 +323,7 @@ def run_parse(name_store, id_store):
     with open('sber_market_full.json', 'w', encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
 
-    with open("test/error_link.json", "w", encoding="utf-8") as f:
+    with open("test_sber/error_link.json", "w", encoding="utf-8") as f:
         json.dump(error_link, f, indent=4, ensure_ascii=False)
 
     print(f"Время окончания: {datetime.datetime.now(): {time_format}}")
