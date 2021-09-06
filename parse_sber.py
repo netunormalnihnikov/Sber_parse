@@ -100,20 +100,21 @@ def save_file(result):
         json.dump(file, f, indent=4, ensure_ascii=False)
 
 
-def recursive(categories, store, category_names=None):
+def recursive(categories, store, id_store, category_names=None):
     for category in categories:
 
         category_list = [category['name']]
         if category_names:
             category_list.extend(category_names)
         if category["children"]:
-            recursive(category["children"], store, category_list)
+            recursive(category["children"], store, id_store, category_list)
         else:
             recurs_products = get_products(
                 category["icon"]["normal_url"],
                 category_list,
                 category["permalink"],
-                store
+                store,
+                id_store
             )
             if recurs_products:
                 result.extend(recurs_products)
@@ -196,9 +197,9 @@ def get_response(link):
 SS = SberSelenium()
 
 
-def get_products(category_img_link, category_list, category_link, store):
+def get_products(category_img_link, category_list, category_link, store, id_store):
     products = []
-    category_link = f"/{store}/c/" + category_link
+    category_link = f"/{store}/c/" + category_link + f"?sid={id_store}"
     category_img_link = category_img_link.split("?")[0]
     page = SS.get_page_products(category_link)
     if not page:
@@ -327,7 +328,7 @@ def run_parse(name_store, id_store):
     print(f"Время начала: {datetime.datetime.now(): {time_format}}")
 
     data = get_file_categories(id_store)
-    recursive(data, name_store)
+    recursive(data, name_store, id_store)
 
     with open('sber_market_full.json', 'w', encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)

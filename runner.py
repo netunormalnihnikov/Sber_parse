@@ -5,4 +5,4 @@ from parse_sber import run_parse
 Второй аргумент - ID необходимого магазина. ID указан в ссылке
 на магазин в списке магазинов сбермаркет, после 'store/'.
 """
-run_parse("victoria", 1092)
+run_parse("metro", 2)
