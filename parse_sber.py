@@ -55,11 +55,20 @@ def get_file_categories(id_store):
         response = requests.get(f"https://sbermarket.ru/api/categories?store_id={id_store}")
         with open(name, 'w', encoding="utf-8") as file:
             a = json.loads(response.text)
+            a = delete_bad_categories(a)
             json.dump(a, file, indent=4, ensure_ascii=False)
         return a
     else:
         with open(name, 'r', encoding="utf-8") as file:
             return json.load(file)
+
+
+def delete_bad_categories(categories: dict):
+    valid_categories_lst = []
+    for category in categories['categories']:
+        if category['name'] in valid_categories:
+            valid_categories_lst.append(category)
+    return valid_categories_lst
 
 
 def create_src_catalog():
@@ -93,21 +102,21 @@ def save_file(result):
 
 def recursive(categories, store, category_names=None):
     for category in categories:
-        if category['name'] in valid_categories:
-            category_list = [category['name']]
-            if category_names:
-                category_list.extend(category_names)
-            if category["children"]:
-                recursive(category["children"], store, category_list)
-            else:
-                recurs_products = get_products(
-                    category["icon"]["normal_url"],
-                    category_list,
-                    category["permalink"],
-                    store
-                )
-                if recurs_products:
-                    result.extend(recurs_products)
+
+        category_list = [category['name']]
+        if category_names:
+            category_list.extend(category_names)
+        if category["children"]:
+            recursive(category["children"], store, category_list)
+        else:
+            recurs_products = get_products(
+                category["icon"]["normal_url"],
+                category_list,
+                category["permalink"],
+                store
+            )
+            if recurs_products:
+                result.extend(recurs_products)
     return
 
 
@@ -318,7 +327,7 @@ def run_parse(name_store, id_store):
     print(f"Время начала: {datetime.datetime.now(): {time_format}}")
 
     data = get_file_categories(id_store)
-    recursive(data['categories'], name_store)
+    recursive(data, name_store)
 
     with open('sber_market_full.json', 'w', encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
