@@ -228,41 +228,46 @@ def get_products(category_img_link, category_list, category_link, store, id_stor
             if resource_not_found:
                 continue
             else:
+                try:
 
-                # картинка категории
-                category_img_name = get_img_name(category_img_link)
-                if not chek_is_download_file(category_img_name):
-                    get_img_categories(category_img_link, category_img_name)
+                    # картинка категории
+                    category_img_name = get_img_name(category_img_link)
+                    if not chek_is_download_file(category_img_name):
+                        get_img_categories(category_img_link, category_img_name)
 
-                # картинка продукта
-                product_block_img = soup.find_all("div", {"data-node-type": "slides"})
-                product_img_link = {}
-                product_img_name = {}
-                for number, product_img in enumerate(product_block_img):
-                    picture_link = product_img.find("img").get("src")
-                    if chek_is_img(picture_link):
-                        product_img_link[number] = picture_link
-                        product_img_name[number] = get_img_name(picture_link)
-                        if not chek_is_download_file(product_img_name[number]):
-                            get_img(picture_link, product_img_name[number])
+                    # картинка продукта
+                    product_block_img = soup.find_all("div", {"data-node-type": "slides"})
+                    product_img_link = {}
+                    product_img_name = {}
+                    for number, product_img in enumerate(product_block_img):
+                        picture_link = product_img.find("img").get("src")
+                        if chek_is_img(picture_link):
+                            product_img_link[number] = picture_link
+                            product_img_name[number] = get_img_name(picture_link)
+                            if not chek_is_download_file(product_img_name[number]):
+                                get_img(picture_link, product_img_name[number])
 
-                    else:
-                        product_img_link = None
-                        product_img_name = None
+                        else:
+                            product_img_link = None
+                            product_img_name = None
 
-                # название продукта
-                product_name = soup.find("h1", {"class": "_2olAT"}).text
+                    # название продукта
+                    product_name = soup.find("h1", {"class": "_2olAT"}).text
 
-                # цена продукта
-                product_price_block = soup.find("div", {"class": "_3AvHk"})
-                # product_price_block.span.decompose()
-                product_price = float(product_price_block.text[:-1].replace(u'\xa0', "").replace(",", "."))
+                    # цена продукта
+                    product_price_block = soup.find("div", {"class": "_3AvHk"})
+                    # product_price_block.span.decompose()
+                    product_price = float(product_price_block.text[:-1].replace(u'\xa0', "").replace(",", "."))
 
-                # единица измерения продукта
-                product_unit_quantity = soup.find("p", {"class": "_1tYVg"}).text
+                    # единица измерения продукта
+                    product_unit_quantity = soup.find("p", {"class": "_1tYVg"}).text
 
-                # блок описания
-                products_block_desc = soup.find("div", {"class": "_1D90_"})
+                    # блок описания
+                    products_block_desc = soup.find("div", {"class": "_1D90_"})
+                except Exception as ex:
+                    print("Ссылка пропущена. Ошибка:")
+                    print(ex)
+                    continue
 
                 # описание продукта
                 try:
