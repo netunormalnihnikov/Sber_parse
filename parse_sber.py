@@ -257,17 +257,14 @@ def get_products(category_img_link, category_list, category_link, store, id_stor
                     # цена продукта
                     product_price_block = soup.find("div", {"class": "_30GKl"})
                     product_price_lst = product_price_block.find_all("div")
+                    product_price = float(product_price_lst[-1].text[:-1].replace(u'\xa0', "").replace(",", "."))
                     if len(product_price_lst) == 2:
                         product_price_without_discount = float(product_price_lst[0].text[:-1].
                                                                replace(u'\xa0', "").
                                                                replace(",", "."))
 
-                        product_price = float(product_price_lst[1].text[:-1].
-                                              replace(u'\xa0', "").
-                                              replace(",", "."))
                     else:
                         product_price_without_discount = None
-                        product_price = float(product_price_lst[0].text[:-1].replace(u'\xa0', "").replace(",", "."))
 
                     # единица измерения продукта
                     product_unit_quantity = soup.find("p", {"class": "_1tYVg"}).text
