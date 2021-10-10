@@ -7,7 +7,7 @@ import json
 
 
 class SberSelenium:
-    def __init__(self, hide_window=False):
+    def __init__(self, hide_window=True):
         self.domain = "https://sbermarket.ru"
         self.chrome_options = Options()
         self.chrome_options.add_argument("headless")
@@ -16,7 +16,7 @@ class SberSelenium:
         else:
             self.driver = webdriver.Chrome()
         self.driver.get(self.domain)
-        for cookie in pickle.load(open("sbermarket_cookies_selenium", "rb")):
+        for cookie in pickle.load(open("sbermarket_cookies_selenium.cookies", "rb")):
             self.driver.add_cookie(cookie)
         self.driver.refresh()
         self.counter = 0

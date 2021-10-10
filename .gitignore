@@ -144,7 +144,7 @@ cython_debug/
 !/sber_market1.json
 !/sber_market.rar
 !/pyvenv.cfg
-!/chromedriver.exe
+!/sber_pars/chromedriver.exe
 !/test_sber/
 !/src1/
 !/Lib/
