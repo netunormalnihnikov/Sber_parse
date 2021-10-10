@@ -7,7 +7,7 @@ import json
 
 
 class SberSelenium:
-    def __init__(self, hide_window=True):
+    def __init__(self, hide_window=False):
         self.domain = "https://sbermarket.ru"
         self.chrome_options = Options()
         self.chrome_options.add_argument("headless")
@@ -113,6 +113,6 @@ if __name__ == "__main__":
 
 
 
-    with open('sber_market_tests.json', 'w') as f:
+    with open('../sber_market_tests.json', 'w') as f:
         json.dump(products, f, indent=4, ensure_ascii=False)
     print("OK")

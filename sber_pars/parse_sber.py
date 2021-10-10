@@ -80,7 +80,7 @@ def create_src_catalog():
 def create_products_file():
     path = Path(__file__).parent.joinpath('sber_market_products.json')
     if not Path.exists(path):
-        with open('sber_market_products.json', 'w', encoding="utf-8") as f:
+        with open('../sber_market_products.json', 'w', encoding="utf-8") as f:
             json.dump([], f, indent=4, ensure_ascii=False)
 
 
@@ -91,12 +91,12 @@ img_file_list = get_img_lst()
 
 
 def save_file(result):
-    with open('sber_market_products.json', 'r', encoding="utf-8") as f:
+    with open('../sber_market_products.json', 'r', encoding="utf-8") as f:
         file = json.load(f)
 
     file.extend(result)
 
-    with open('sber_market_products.json', 'w', encoding="utf-8") as f:
+    with open('../sber_market_products.json', 'w', encoding="utf-8") as f:
         json.dump(file, f, indent=4, ensure_ascii=False)
 
 
@@ -343,10 +343,10 @@ def run_parse(name_store, id_store):
     data = get_file_categories(id_store)
     recursive(data, name_store, id_store)
 
-    with open('sber_market_full.json', 'w', encoding="utf-8") as f:
+    with open('../sber_market_full.json', 'w', encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
 
-    with open("test_sber/error_link.json", "w", encoding="utf-8") as f:
+    with open("../test_sber/error_link.json", "w", encoding="utf-8") as f:
         json.dump(error_link, f, indent=4, ensure_ascii=False)
 
     print(f"Время окончания: {datetime.datetime.now(): {time_format}}")
